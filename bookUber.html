@@ -1,0 +1,171 @@
+
+
+<html>
+	<head>	
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js" type = "text/javascript"></script>
+		<title>uber integration</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />		
+		    <link rel="stylesheet" href="./styles/bootstrap.min.css" />		
+            <link rel="stylesheet" href="./styles/font-awesome.min.css" /> 
+            <link rel="stylesheet" href="./styles/location_form.css" /> 
+	</head>
+	
+	<body> 
+    <img id="loading" class="showBooking" src="./Images/uber-loading.gif">
+        <div id="bookingPage" class="container-fluid hiddenBooking" style="overflow: auto ;color:blue" >		
+            <div id="selection" class="container">
+                <div>
+                  <div class="page-header">
+                    <h1 id= "titleRow" style="color:black; text-align:center">Book an Uber</h1>      
+                  </div>                       
+                    <h4 id="descriptionRow" style="color:black; text-align:center">Ride to/from your Event</h4>
+                    </div>
+
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog modal-sm">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h4 id="fareTypeEstimate" class="modal-title" style="text-align:center">Surge Pricing</h4>
+                            </div>
+                            <div class="modal-body">
+                              <h2 style="text-align:center" id="surgeMultiplierValue"></h2>
+                            </div>
+                            <div class="modal-footer">
+                            <div align:"center">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" data-value="1">Accept</button>
+                              <button type="button" class="btn btn-danger" data-dismiss="modal" data-value="0">Decline</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div id="bookData" style="margin-top:2%">
+                    
+                        
+                    <div class="col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">     
+                    <div class="panel panel-primary" >
+                   
+                    <div class="panel-heading">
+                        <div id="rideStatusRow" class="panel-title">Ride Status</div>
+                    </div>
+                    <div class="panel-body">
+
+                              <div id="rideStatusPanel" class="panel panel-primary fareEstimatePanel">
+                                <div class="panel-body"><h3 id="showRideStatus" style="text-align:center; color:black;">Fetching Status...</h3></div>
+                              </div>
+                              <iframe id="showUberRideMap" class="hiddenEstimate" style="width:100%; height:50%;"></iframe> 
+                            <div id="showTripStatus" class ="row hiddenEstimate">
+                            <div class = "col-sm-4">
+                                <div class="panel panel-primary fareEstimatePanel">
+                                    <div class="panel-heading">
+                                        <div class="panel-title text-center">Driver Details</div>
+                                    </div>
+
+                                    <div class="panel-body">
+                                        <p style="text-align:center; color:black;"><b id="driverName" style="margin-right:1em;"></b><b id="driverRating"></b><i class="fa fa-star" aria-hidden="true"></i></p>
+                                        <p id="driverPhone" style="text-align:center; color:black;"></p>            
+                                        <p id="rideType" style="text-align:center; color:black;"></p>
+                                    </div>
+                                </div>   
+                            </div>
+                            <div class = "col-sm-4">
+                                <div class="panel panel-primary fareEstimatePanel">
+                                    <div class="panel-heading">
+                                        <div class="panel-title text-center">Driver</div>
+                                    </div>                       
+                                <div class="panel-body">                                   
+                                        <img id="driverImage" class="smaller-image thick-green-border img-responsive center-block" alt="Driver">                                   
+                                </div>
+                                </div>
+                            </div>
+                            <div class = "col-sm-4">
+                                <div class="panel panel-primary fareEstimatePanel">
+                                    <div class="panel-heading">
+                                        <div class="panel-title text-center">Ride Details</div>
+                                    </div>                                
+                                <div class="panel-body">                                   
+                                        <p style="text-align:center; color:black;"><b id="rideMake"></b></p>
+                                        <p id="rideName" style="text-align:center; color:black;"></p>
+                                        <p id="rideNumber" style="text-align:center; color:black;"></p>                                    
+                                </div>
+                                </div>
+                            </div>
+                            
+                        
+                        </div>
+
+
+                        <div id = "receiptPage" class="hiddenEstimate">                            
+                            <div style="width:100%;">
+                                <div id="receiptInfoPanel" class="panel panel-primary fareEstimatePanel">
+                                    <img id= "receiptDriverPic" class="smaller-image thick-green-border img-responsive center-block" style="display:inline; float:left;" src="https://d1a3f4spazzrp4.cloudfront.net/uberex-sandbox/images/driver.jpg" alt="Driver">     
+                                    <div class="panel-body"><h3 id="receiptRodeWith" style="text-align:center; color:black;"></h3> 
+                                    </div>
+                                </div>
+                            </div>                  
+                            <div style="width:100%;">
+                                <div id="receiptTripDetailsPanel" class="panel panel-primary fareEstimatePanel">     
+                                    <div class="panel-heading">
+                                        <div class="panel-title text-center">Trip Details</div>
+                                    </div>
+                                    <div class="panel-body">
+                                        <div>
+                                            <p style="text-align:center; color:black;float:right;"><b id="receiptDistance"></b></p>
+                                            <p style=" color:black;  "><b>Distance</b></p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align:center; color:black; float:right; "><b id="receiptTime"></b></p>
+                                            <p style=" color:black; "><b>Trip Time</b></p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align:center; color:black;  float:right;"><b id="receiptProduct"></b></p>
+                                            <p style=" color:black; "><b>Product</b></p>
+                                        </div>
+                                        <div>
+                                            <p style="text-align:center; color:black;  float:right;"><b id="receiptVehicle"></b></p>
+                                            <p style=" color:black; "><b>Vehicle</b></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width:100%;">
+                                <div id="receiptFareDetailsPanel" class="panel panel-primary fareEstimatePanel">     
+                                    <div class="panel-heading">
+                                        <div class="panel-title text-center">Your Fare</div>
+                                    </div>
+                                    <div id="showFareBreakdown" class="panel-body">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>    
+
+
+                            <div id="cancelRideContainer" class="form-group request-button row hiddenEstimate" style="margin-left:1%;">
+<!--                                 <div class="col-sm-4 controls">
+                                    <button type="button" class=" btn btn-primary button" id="checkStatus">Check Status</button>
+                                </div> -->
+                                <div class="col-sm-4 col-sm-offset-5 controls">
+                                    <button type="button" class=" btn btn-primary button" id="cancelRide">Cancel</button>
+                                </div>
+                            </div>
+
+                            <div id="homeContainer" class="form-group request-button row hiddenEstimate" style="margin-left:1%;">
+                                <div class="col-sm-4 col-sm-offset-5 controls">
+                                    <button type="button" class=" btn btn-primary button" id="homeLink">Home</button>
+                                </div>
+                            </div>
+                          
+                    </div>
+            </div>
+            </div>
+                        
+                        
+
+                    </div>
+            </div>
+		</div>     
+        <script src="bookUber.js" type = "text/javascript"></script>	
+        <script src="./js/bootstrap.min.js" type="text/javascript"></script>
+	</body>
+</html>
